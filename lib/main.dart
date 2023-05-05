@@ -225,25 +225,58 @@ class pokemonwidget extends StatelessWidget {
       appBar: AppBar(
         title: Text('Informações sobre ' + name),
       ),
-      body: Column(
-        children: [
-          Row(
-            children: [
-              Column(
-                children: [
-                  Container(
-                    child: Image.network(img),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  Text(name),
-                ],
-              ),
-            ],
-          ),
-        ],
+      body: Container(
+        color: Colors.blue,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(40),
+                            topRight: Radius.circular(40),
+                            bottomLeft: Radius.circular(40),
+                            bottomRight: Radius.circular(40)),
+                      ),
+                      width: 270,
+                      height: 170,
+                      margin: EdgeInsets.only(left: 120, top: 80),
+                    ),
+                    Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(left: 0, top: 30),
+                          child: Image.network(
+                            img,
+                            width: 250,
+                            height: 250,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Color.fromRGBO(255, 255, 255, 1)),
+                      child: Text(
+                        name,
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.bold),
+                      ),
+                      margin: EdgeInsets.only(left: 190, top: 80),
+                    ),
+                    Container(
+                      child: Text(''),
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
