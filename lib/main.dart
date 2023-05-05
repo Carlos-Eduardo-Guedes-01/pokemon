@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:js';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:device_preview/device_preview.dart';
 
 class Pokemons {
   List<Dados>? dados;
@@ -70,7 +71,8 @@ Future<List<dynamic>> fetchUsers() async {
   return jsonDecode(result.body)['pokemon'];
 }
 
-void main() => runApp(const MyApp());
+void main() =>
+    runApp(DevicePreview(enabled: true, builder: (context) => MyApp()));
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -80,6 +82,13 @@ class MyApp extends StatelessWidget {
     const appTitle = 'Lista de Pokemons';
 
     return MaterialApp(
+      theme: ThemeData(
+        appBarTheme: AppBarTheme(
+          color: Colors.black12, // cor de fundo
+          foregroundColor: Colors.white, // cor do texto
+          elevation: 2, // sombreamento
+        ),
+      ),
       title: appTitle,
       initialRoute: '/',
       routes: {
@@ -130,37 +139,66 @@ class PokemonsList extends StatelessWidget {
       itemCount: pokemons.length,
       itemBuilder: (context, index) {
         return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               height: 10,
             ),
-            ElevatedButton(
-              onPressed: () =>
-                  Navigator.pushNamed(context, 'details', arguments: {
-                'name': pokemons[index].name,
-                'img': pokemons[index].img,
-                'id': pokemons[index].id,
-              }),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Image.network(
-                    "${pokemons[index].img}",
-                    width: 500,
-                    height: 200,
-                    alignment: Alignment.center,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 150),
-                    alignment: Alignment.bottomCenter,
-                    child: Text(
-                      "${pokemons[index].name}",
-                      style: TextStyle(
-                          fontSize: 18, color: Color.fromRGBO(0, 0, 0, 0.5)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 300,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color.fromRGBO(247, 193, 18, 1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        side: BorderSide(
+                            color: Color.fromRGBO(48, 108, 172, 1), width: 5),
+                      ),
+                    ),
+                    /*style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                        Color.fromRGBO(247, 193, 18, 1),
+                      ),
+                      side: MaterialStateProperty.all(
+                        BorderSide(
+                            width: 5,
+                            color: Color.fromRGBO(48, 108, 172, 1),
+                            style: BorderStyle.solid),
+                      ),
+                    ), */
+                    onPressed: () =>
+                        Navigator.pushNamed(context, 'details', arguments: {
+                      'name': pokemons[index].name,
+                      'img': pokemons[index].img,
+                      'id': pokemons[index].id,
+                    }),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Image.network(
+                          "${pokemons[index].img}",
+                          width: 250,
+                          height: 200,
+                          alignment: Alignment.center,
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 150),
+                          alignment: Alignment.bottomCenter,
+                          child: Text(
+                            "${pokemons[index].name}",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Color.fromRGBO(0, 0, 0, 0.5)),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
             Container(
               height: 30,
@@ -185,7 +223,7 @@ class pokemonwidget extends StatelessWidget {
     final int id = args['id'];
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detalhes Pokemon'),
+        title: Text('Informações sobre ' + name),
       ),
       body: Column(
         children: [
@@ -193,10 +231,16 @@ class pokemonwidget extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  Image.network(img),
+                  Container(
+                    child: Image.network(img),
+                  ),
+                ],
+              ),
+              Column(
+                children: [
                   Text(name),
                 ],
-              )
+              ),
             ],
           ),
         ],
