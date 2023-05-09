@@ -56,11 +56,6 @@ class Dados {
     weight = json['weight'];
     height = json['height'];
     weaknesses = json['weaknesses'].cast<String>();
-    /*if (json['next_evolution'] != null) {
-      json['next_evolution'].forEach((v) {
-        next_evolution!.add(new Evolution.fromJson(v));
-      });
-    }*/
   }
 
   Map<String, dynamic> toJson() {
@@ -250,7 +245,6 @@ class pokemonwidget extends StatelessWidget {
   static const routeName = 'details';
 
   const pokemonwidget({super.key});
-
   @override
   Widget build(BuildContext context) {
     final Map args = ModalRoute.of(context)!.settings.arguments as Map;
@@ -283,7 +277,7 @@ class pokemonwidget extends StatelessWidget {
                             bottomRight: Radius.circular(40)),
                       ),
                       width: 370,
-                      height: 300,
+                      height: 150,
                       margin: EdgeInsets.only(left: 10, top: 200),
                     ),
                     Container(
@@ -308,11 +302,11 @@ class pokemonwidget extends StatelessWidget {
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
-                              widgetdesclist('Tipo: ', args["type"], 80),
-                              widgetdescricao('Peso: ', args['weight'], 100),
-                              widgetdescricao('Altura: ', args['height'], 120),
+                              widgetdesclist('Tipo: ', args["type"], 90),
+                              widgetdescricao('Peso: ', args['weight'], 110),
+                              widgetdescricao('Altura: ', args['height'], 130),
                               widgetdesclist(
-                                  'Fraquezas: ', args['weaknesses'], 140)
+                                  'Fraquezas: ', args['weaknesses'], 150),
                             ],
                           ),
                         ],
