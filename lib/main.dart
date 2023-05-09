@@ -35,15 +35,18 @@ class Dados {
   String? weight;
   String? height;
   List<String>? weaknesses;
+  //List<Evolution>? next_evolution;
 
-  Dados(
-      {this.id,
-      this.name,
-      this.img,
-      this.type,
-      this.weight,
-      this.height,
-      this.weaknesses});
+  Dados({
+    this.id,
+    this.name,
+    this.img,
+    this.type,
+    this.weight,
+    this.height,
+    this.weaknesses,
+    //this.next_evolution,
+  });
 
   Dados.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -53,6 +56,11 @@ class Dados {
     weight = json['weight'];
     height = json['height'];
     weaknesses = json['weaknesses'].cast<String>();
+    /*if (json['next_evolution'] != null) {
+      json['next_evolution'].forEach((v) {
+        next_evolution!.add(new Evolution.fromJson(v));
+      });
+    }*/
   }
 
   Map<String, dynamic> toJson() {
@@ -64,6 +72,28 @@ class Dados {
     data['weight'] = this.weight;
     data['height'] = this.height;
     data['weaknesses'] = this.weaknesses;
+    /*if (this.next_evolution != null) {
+      data['next_evolution'] =
+          this.next_evolution!.map((v) => v.toJson()).toList();
+    }*/
+    return data;
+  }
+}
+
+class Evolution {
+  String? name;
+  int? num;
+
+  Evolution({this.name, this.num});
+
+  Evolution.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    num = json['num'];
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['num'] = this.num;
+    data['nome'] = this.name;
     return data;
   }
 }
