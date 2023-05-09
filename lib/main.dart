@@ -1,5 +1,3 @@
-//main.dart
-
 import 'dart:convert';
 import 'dart:js';
 import 'package:flutter/material.dart';
@@ -33,17 +31,28 @@ class Dados {
   int? id;
   String? name;
   String? img;
+  List<String>? type;
+  String? weight;
+  String? height;
+  List<String>? weaknesses;
 
-  Dados({
-    this.id,
-    this.name,
-    this.img,
-  });
+  Dados(
+      {this.id,
+      this.name,
+      this.img,
+      this.type,
+      this.weight,
+      this.height,
+      this.weaknesses});
 
   Dados.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     img = json['img'];
+    type = json['type'].cast<String>();
+    weight = json['weight'];
+    height = json['height'];
+    weaknesses = json['weaknesses'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {
@@ -51,6 +60,10 @@ class Dados {
     data['id'] = this.id;
     data['name'] = this.name;
     data['img'] = this.img;
+    data['type'] = this.type;
+    data['weight'] = this.weight;
+    data['height'] = this.height;
+    data['weaknesses'] = this.weaknesses;
     return data;
   }
 }
@@ -158,22 +171,15 @@ class PokemonsList extends StatelessWidget {
                             color: Color.fromRGBO(48, 108, 172, 1), width: 5),
                       ),
                     ),
-                    /*style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                        Color.fromRGBO(247, 193, 18, 1),
-                      ),
-                      side: MaterialStateProperty.all(
-                        BorderSide(
-                            width: 5,
-                            color: Color.fromRGBO(48, 108, 172, 1),
-                            style: BorderStyle.solid),
-                      ),
-                    ), */
                     onPressed: () =>
                         Navigator.pushNamed(context, 'details', arguments: {
                       'name': pokemons[index].name,
                       'img': pokemons[index].img,
                       'id': pokemons[index].id,
+                      'type': pokemons[index].type,
+                      'weight': pokemons[index].weight,
+                      'height': pokemons[index].height,
+                      'weaknesses': pokemons[index].weaknesses,
                     }),
                     child: Stack(
                       alignment: Alignment.center,
@@ -221,9 +227,13 @@ class pokemonwidget extends StatelessWidget {
     final String name = args['name'];
     final String img = args['img'];
     final int id = args['id'];
+    final List<String> type = args['type'];
+    final String weight = args['weight'];
+    final String height = args['height'];
+    final List<String> weaknesses = args['weaknesses'];
     return Scaffold(
       appBar: AppBar(
-        title: Text('Informações sobre ' + name),
+        title: Text('Informações sobre $name'),
       ),
       body: Container(
         color: Colors.blue,
@@ -242,35 +252,42 @@ class pokemonwidget extends StatelessWidget {
                             bottomLeft: Radius.circular(40),
                             bottomRight: Radius.circular(40)),
                       ),
-                      width: 270,
-                      height: 170,
-                      margin: EdgeInsets.only(left: 120, top: 80),
-                    ),
-                    Column(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(left: 0, top: 30),
-                          child: Image.network(
-                            img,
-                            width: 250,
-                            height: 250,
-                          ),
-                        ),
-                      ],
+                      width: 370,
+                      height: 300,
+                      margin: EdgeInsets.only(left: 10, top: 200),
                     ),
                     Container(
-                      decoration: BoxDecoration(
-                          color: Color.fromRGBO(255, 255, 255, 1)),
-                      child: Text(
-                        name,
-                        style: TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.bold),
+                      child: Image.network(
+                        img,
+                        width: 380,
+                        height: 300,
                       ),
-                      margin: EdgeInsets.only(left: 190, top: 80),
                     ),
                     Container(
-                      child: Text(''),
-                    )
+                      margin: EdgeInsets.only(left: 0, top: 150),
+                      child: Row(
+                        children: [
+                          Stack(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(left: 130, top: 50),
+                                child: Text(
+                                  name,
+                                  style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              widgetdesclist('Tipo: ', args["type"], 80),
+                              widgetdescricao('Peso: ', args['weight'], 100),
+                              widgetdescricao('Altura: ', args['height'], 120),
+                              widgetdesclist(
+                                  'Fraquezas: ', args['weaknesses'], 140)
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ],
@@ -280,4 +297,37 @@ class pokemonwidget extends StatelessWidget {
       ),
     );
   }
+}
+
+widgetdescricao(String texto, String informacao, double val) {
+  return Container(
+    decoration: BoxDecoration(color: Color.fromRGBO(255, 255, 255, 1)),
+    margin: EdgeInsets.only(top: val, left: 20),
+    child: Row(
+      children: [
+        Text(
+          '$texto $informacao',
+          //'Tipo: ${args["type"]}',
+          style: TextStyle(fontSize: 17),
+        ),
+      ],
+    ),
+  );
+}
+
+widgetdesclist(String texto, List<String> informacao, double val) {
+  String nome = informacao.join(', ');
+  return Container(
+    decoration: BoxDecoration(color: Color.fromRGBO(255, 255, 255, 1)),
+    margin: EdgeInsets.only(top: val, left: 20),
+    child: Row(
+      children: [
+        Text(
+          '$texto $nome',
+          //'Tipo: ${args["type"]}',
+          style: TextStyle(fontSize: 17),
+        ),
+      ],
+    ),
+  );
 }
